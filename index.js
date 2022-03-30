@@ -1,13 +1,14 @@
-require('dotenv').config();
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const app = express();
+const { sendMessage } = require("./functions");
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
+const port = process.env.PORT || 3000;
 
-client.messages
-  .create({
-     body: 'Ahoy mate 🏴‍☠️',
-     from: '+18645278376',
-     to: '+19173929054'
-   })
-  .then(message => console.log(message));
+app.use(express.json());
+app.use(cors());
+
+app.post("/send-message", sendMessage);
+
+app.listen(port, () => console.log(`Listening on port ${port}!`));
